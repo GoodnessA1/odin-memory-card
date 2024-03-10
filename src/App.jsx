@@ -1,35 +1,93 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+const names_of_game = [
+  {
+    id : 1,
+    image: 'GIANT LIZARD',
+  },
+  {
+    id : 2,
+    image: 'MONITOR LIZARD',
+  },
+  {
+    id : 3,
+    image: 'MUTANT MONKEY',
+  },
+  {
+    id : 4,
+    image: 'GIANT FISH',
+  },
+  {
+    id : 5,
+    image: 'EMERALD MONKEY',
+  },
+  {
+    id : 6,
+    image: 'AGAMA LIZARD',
+  },
+  {
+    id : 7,
+    image: 'THREOBROMA CACAO',
+  },
+  {
+    id : 8,
+    image: 'KARIKA PAPAYA',
+  },
+  {
+    id : 9,
+    image: 'LITHOBATHES SPHENOCEPHALA',
+  },
+]
+
+const shuffle = (array) => {
+  let i = array.length, j;
+
+  while (i > 0) {
+    j = Math.floor(Math.random() * i);
+    i--;
+
+    [array[i], array[j]] = [array[j], array[i]]
+  }
+
+  return (array)
 }
 
-export default App
+export default function App () {
+  const [highScore, setHighScore] = useState(0);
+  const [score, setScore] = useState(0);
+  const [clickedItems, setClickedItems] = useState([]);
+
+  const handleClick = (array, id) => {
+    if (!clickedItems.includes(id)) {
+      setClickedItems([...clickedItems, id]);
+      setScore(score + 1);
+
+      if (score + 1 > highScore) {
+        setHighScore(score + 1);
+      }
+    }
+    else {
+      setScore(0);
+      setClickedItems([]);
+    }
+
+    shuffle(array);
+  };
+  return (
+    <div className='container'>
+      <h1>GOODNESS MEMORY GAME</h1>
+      <header>Score: {score} <br /> HighestScore: {highScore}</header>
+      <div className='game'>
+        {names_of_game.map((game) =>{
+          return(
+            <div key={game.id} onClick={() => handleClick(names_of_game, game.id)} className='game'>
+              <h2>{game.image}</h2>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
